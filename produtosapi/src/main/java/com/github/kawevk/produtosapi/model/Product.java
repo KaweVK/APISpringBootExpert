@@ -2,7 +2,7 @@ package com.github.kawevk.produtosapi.model;
 
 public class Product {
 
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private Double price;
@@ -10,11 +10,11 @@ public class Product {
     public Product() {
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
