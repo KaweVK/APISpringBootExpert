@@ -48,4 +48,9 @@ public class ProductController {
         return product;
     }
 
+    @GetMapping("/search")
+    public List<Product> search(@RequestParam("name") String name) {
+        return productRepository.findByName(name);
+    }
+
 }
