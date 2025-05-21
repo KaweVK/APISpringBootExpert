@@ -1,13 +1,13 @@
-package io.github.kawevk.produtosapi;
+package com.github.kawevk.produtosapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProdutosApiApplication {
+public class ProductsApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProdutosApiApplication.class, args);
+		SpringApplication.run(ProductsApiApplication.class, args);
 	}
 
 }
