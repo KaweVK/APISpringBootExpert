@@ -1,10 +1,19 @@
 package com.github.kawevk.produtosapi.model;
 
+import jakarta.persistence.*;
+
+@Entity(name = "product")
+@Table
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(name = "name" ,nullable = false)
     private String name;
+    @Column
     private String description;
+    @Column
     private Double price;
 
     public Product() {
