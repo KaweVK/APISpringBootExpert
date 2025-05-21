@@ -5,6 +5,7 @@ import com.github.kawevk.produtosapi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +31,21 @@ public class ProductController {
         return product.orElse(null);
     }
 
+    @GetMapping
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
 
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable("id") String id) {
+        productRepository.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Product update(@PathVariable("id") String id, @RequestBody Product product) {
+        product.setId(id);
+        productRepository.save(product);
+        return product;
+    }
 
 }
