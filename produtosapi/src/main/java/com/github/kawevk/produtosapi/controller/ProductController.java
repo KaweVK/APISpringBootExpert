@@ -3,12 +3,9 @@ package com.github.kawevk.produtosapi.controller;
 import com.github.kawevk.produtosapi.model.Product;
 import com.github.kawevk.produtosapi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
@@ -26,5 +23,13 @@ public class ProductController {
         productRepository.save(product);
         return product;
     }
+
+    @GetMapping("/{id}")
+    public Product getById(@PathVariable("id") String id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.orElse(null);
+    }
+
+
 
 }
