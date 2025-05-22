@@ -14,7 +14,6 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
-
     @PostMapping(
 //            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE},
 //            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
