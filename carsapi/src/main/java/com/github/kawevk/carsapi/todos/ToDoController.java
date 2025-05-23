@@ -1,7 +1,9 @@
 package com.github.kawevk.carsapi.todos;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -18,7 +20,12 @@ public class ToDoController {
 
     @PostMapping
     public ToDoEntity create(@RequestBody ToDoEntity toDoEntity) {
-        return toDoService.create(toDoEntity);
+        try {
+            return toDoService.create(toDoEntity);
+        } catch (Exception e) {
+            var message = e.getMessage();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, message);
+        }
     }
 
     @PutMapping

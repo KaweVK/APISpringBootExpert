@@ -2,4 +2,8 @@ package com.github.kawevk.carsapi.todos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ToDoRepository extends JpaRepository<ToDoEntity, Long> {}
+import java.util.Optional;
+
+public interface ToDoRepository extends JpaRepository<ToDoEntity, Long> {
+    Boolean existsByDescription(String description);
+}
