@@ -13,7 +13,7 @@ public class ToDoEntity {
     @Column(name = "title")
     private String title;
     @Column(name = "description")
-    private Boolean description;
+    private String description;
     @Column(name = "completed")
     private Boolean completed;
 
@@ -33,11 +33,11 @@ public class ToDoEntity {
         this.title = title;
     }
 
-    public Boolean getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Boolean description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
