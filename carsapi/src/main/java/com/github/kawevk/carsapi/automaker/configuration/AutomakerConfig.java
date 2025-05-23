@@ -4,10 +4,12 @@ import com.github.kawevk.carsapi.automaker.Engine;
 import com.github.kawevk.carsapi.automaker.EngineType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AutomakerConfig {
 
+    @Primary
     @Bean(name = "aspirado")
     public Engine aspiradoEngine() {
         var engine = new Engine();
