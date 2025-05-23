@@ -53,4 +53,11 @@ public class Car {
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
+
+    public CarStats ignition(Key key) {
+        if (automaker != key.getAutomaker()) {
+            return new CarStats("Não é possível ligar carro");
+        }
+        return new CarStats("ligado, com motor " + engine);
+    }
 }
