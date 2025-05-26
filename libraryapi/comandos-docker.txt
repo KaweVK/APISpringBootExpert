@@ -1,0 +1,7 @@
+#Rodar container do PostgreSQL
+docker run --name librarydb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=library postgres:latest
+
+#Rodar container do Pgadmin4
+docker run -p 15432:80 --name pgadmin4 -e PGADMIN_DEFAULT_EMAIL=victorkawe07@gmail.com -e PGADMIN_DEFAULT_PASSWORD=admin dpage/pgadmin4
+
+
