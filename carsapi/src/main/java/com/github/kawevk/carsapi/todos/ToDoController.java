@@ -11,7 +11,6 @@ import java.util.List;
 @RequestMapping("/to-dos")
 public class ToDoController {
 
-    @Autowired //se tiver construtor não precisa
     private ToDoService toDoService;
 
     public ToDoController(ToDoService toDoService) {

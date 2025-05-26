@@ -1,6 +1,5 @@
 package com.github.kawevk.carsapi.todos;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 @Service
 public class ToDoService {
 
-    @Autowired //com construtor não precisa
     private ToDoRepository toDoRepository;
     private ToDoValidator toDoValidator;
     private MailSender mailSender;

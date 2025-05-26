@@ -3,3 +3,7 @@ spring:
     name: Cars
   jpa:
     show-sql: true
+
+logging:
+  level:
+    root: warn
