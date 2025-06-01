@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -28,9 +29,9 @@ public class Book {
     private LocalDate publicationDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false, length = 30)
-    private String gender;
+    private BookGender gender;
     @Column(name = "price", nullable = false, precision = 18, scale = 2)
-    private Double price;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "id_author", nullable = false)
