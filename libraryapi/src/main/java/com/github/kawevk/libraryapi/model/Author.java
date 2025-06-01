@@ -1,16 +1,17 @@
 package com.github.kawevk.libraryapi.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "author", schema = "public")
-@Getter //em tempo de compliação, gera os métodos getters
-@Setter //em tempo de compliação, gera os métodos setters
+@Data
+@AllArgsConstructor
 public class Author {
 
     @Id
@@ -24,6 +25,9 @@ public class Author {
     private LocalDate birthDate;
     @Column(name = "nationality", nullable = false, length = 50)
     private String nationality;
+
+    @OneToMany(mappedBy = "author")
+    private List<Book> books;
 
     @Deprecated
     public Author() {
