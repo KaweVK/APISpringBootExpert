@@ -16,3 +16,5 @@ create table book(
 	constraint chk_gender check (gender in ('FICCAO', 'FANTASIA', 'MISTERIO', 'ROMANCE', 'BIOGRAFIA', 'TERROR'))
 );
 
+select b.title, a.name as author_name from book b join author a on a.id=b.id_author;
+

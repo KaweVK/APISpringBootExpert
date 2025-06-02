@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,6 +15,12 @@ public class AuthorRepositoryTest {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @Test
+    public void findAll() {
+        List<Author> authors = authorRepository.findAll();
+        authors.forEach(System.out::println);
+    }
 
     @Test
     public void save() {
@@ -36,6 +43,12 @@ public class AuthorRepositoryTest {
             author.setNationality("USA");
             authorRepository.save(author);
         }
+    }
+
+    @Test
+    public void count() {
+        long count = authorRepository.count();
+        System.out.println("Total authors: " + count);
     }
 
 }
