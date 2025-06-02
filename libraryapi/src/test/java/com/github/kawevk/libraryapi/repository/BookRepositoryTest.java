@@ -44,6 +44,25 @@ class BookRepositoryTest {
     }
 
     @Test
+    public void saveWithCascaade() {
+        Book book = new Book();
+        book.setIsbn("99999-99929");
+        book.setTitle("Verity");
+        book.setPublicationDate(LocalDate.of(2005, 4, 25));
+        book.setPrice(BigDecimal.valueOf(45.9));
+        book.setGender(BookGender.ROMANCE);
+
+        Author author = new Author();
+        author.setName("Coollen Hoover");
+        author.setBirthDate(LocalDate.of(1979, 12, 11));
+        author.setNationality("American");
+
+        book.setAuthor(author);
+
+        var savedBook = bookRepository.save(book);
+    }
+
+    @Test
     public void update() {
         var id = UUID.fromString("aaa769cd-8a1b-491b-ab66-e1cde57454cc");
 
