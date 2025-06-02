@@ -1,0 +1,64 @@
+package com.github.kawevk.libraryapi.repository;
+
+import com.github.kawevk.libraryapi.model.Author;
+import com.github.kawevk.libraryapi.model.Book;
+import com.github.kawevk.libraryapi.model.BookGender;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@SpringBootTest
+class BookRepositoryTest {
+
+    @Autowired
+    BookRepository bookRepository;
+
+    @Autowired
+    AuthorRepository authorRepository;
+
+    @Test
+    public void findAll() {
+        List<Book> books = bookRepository.findAll();
+        books.forEach(System.out::println);
+    }
+
+    @Test
+    public void save() {
+        Book book = new Book();
+        book.setIsbn("99999-99999");
+        book.setTitle("A cinco passos de você");
+        book.setPublicationDate(LocalDate.of(2005, 4, 25));
+        book.setPrice(BigDecimal.valueOf(45.9));
+        book.setGender(BookGender.ROMANCE);
+
+        Author author = authorRepository.findById(UUID.fromString("d92eb885-0784-4c35-a069-841a9b9c98e5")).orElse(null);
+        book.setAuthor(author);
+
+        var savedBook = bookRepository.save(book);
+    }
+
+    @Test
+    public void update() {
+        var id = UUID.fromString("aaa769cd-8a1b-491b-ab66-e1cde57454cc");
+
+        Optional<Book> bookFinded = bookRepository.findById(id);
+        if (bookFinded.isPresent()) {
+            Book book = bookFinded.get();
+            book.setTitle("A Cinco Passos de Você - Edição Especial");
+            bookRepository.save(book);
+        }
+    }
+
+    @Test
+    public void count() {
+        long count = bookRepository.count();
+        System.out.println("Total authors: " + count);
+    }
+
+}
