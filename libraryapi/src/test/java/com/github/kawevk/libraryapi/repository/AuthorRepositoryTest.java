@@ -6,6 +6,7 @@ import com.github.kawevk.libraryapi.model.BookGender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -87,7 +88,17 @@ public class AuthorRepositoryTest {
 
         authorRepository.save(author);
         bookRepository.saveAll(author.getBooks());
+    }
 
+    @Test
+    void listBooksByAuthor() {
+        var id = UUID.fromString("627bb44b-f220-444a-879f-dfe4c11ef57f");
+        var author = authorRepository.findById(id).get();
+
+        List<Book> books = bookRepository.findByAuthor(author);
+        author.setBooks(books);
+
+        author.getBooks().forEach(System.out::println);
     }
 
 }

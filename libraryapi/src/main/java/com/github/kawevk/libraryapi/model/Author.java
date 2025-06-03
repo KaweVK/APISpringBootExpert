@@ -26,7 +26,7 @@ public class Author {
     @Column(name = "nationality", nullable = false, length = 50)
     private String nationality;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> books;
 
     @Deprecated
