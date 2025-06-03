@@ -6,6 +6,7 @@ import com.github.kawevk.libraryapi.model.BookGender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,13 +24,13 @@ class BookRepositoryTest {
     AuthorRepository authorRepository;
 
     @Test
-    public void findAll() {
+    void findAll() {
         List<Book> books = bookRepository.findAll();
         books.forEach(System.out::println);
     }
 
     @Test
-    public void save() {
+    void save() {
         Book book = new Book();
         book.setIsbn("99999-99999");
         book.setTitle("A cinco passos de você");
@@ -44,7 +45,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    public void saveWithCascaade() {
+    void saveWithCascade() {
         Book book = new Book();
         book.setIsbn("99999-99929");
         book.setTitle("Verity");
@@ -63,7 +64,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    public void update() {
+    void update() {
         var id = UUID.fromString("aaa769cd-8a1b-491b-ab66-e1cde57454cc");
 
         Optional<Book> bookFinded = bookRepository.findById(id);
@@ -75,9 +76,20 @@ class BookRepositoryTest {
     }
 
     @Test
-    public void count() {
+    void count() {
         long count = bookRepository.count();
         System.out.println("Total authors: " + count);
+    }
+
+    @Test
+    @Transactional
+    void searchBook() {
+        UUID id = UUID.fromString("a9ad45e8-1800-440d-b208-79761f991cae");
+        Book book = bookRepository.findById(id).orElse(null);
+        System.out.println("Book: ");
+        System.out.println(book.getTitle());
+        System.out.println("Author: ");
+        System.out.println(book.getAuthor().getName());
     }
 
 }
