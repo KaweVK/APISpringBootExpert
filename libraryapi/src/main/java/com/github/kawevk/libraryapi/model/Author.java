@@ -26,8 +26,7 @@ public class Author {
     @Column(name = "nationality", nullable = false, length = 50)
     private String nationality;
 
-    //@OneToMany(mappedBy = "author")
-    @Transient
+    @OneToMany(mappedBy = "author")
     private List<Book> books;
 
     @Deprecated
