@@ -83,13 +83,19 @@ class BookRepositoryTest {
 
     @Test
     @Transactional
-    void searchBook() {
+    void searchBookById() {
         UUID id = UUID.fromString("a9ad45e8-1800-440d-b208-79761f991cae");
         Book book = bookRepository.findById(id).orElse(null);
         System.out.println("Book: ");
         System.out.println(book.getTitle());
         System.out.println("Author: ");
         System.out.println(book.getAuthor().getName());
+    }
+
+    @Test
+    void searchByTitle() {
+        List<Book> books = bookRepository.findByTitleContainingIgnoreCase("ve");
+        books.forEach(System.out::println);
     }
 
 }
