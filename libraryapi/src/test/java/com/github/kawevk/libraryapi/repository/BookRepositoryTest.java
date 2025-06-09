@@ -116,6 +116,10 @@ class BookRepositoryTest {
         titles.forEach(System.out::println);
     }
 
-
+    @Test
+    void findByGender() {
+        List<Book> books = bookRepository.findByGender(BookGender.ROMANCE, "title");
+        books.forEach(System.out::println);
+    }
 
 }
