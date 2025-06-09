@@ -98,4 +98,24 @@ class BookRepositoryTest {
         books.forEach(System.out::println);
     }
 
+    @Test
+    void listAllWithQuery() {
+        List<Book> books = bookRepository.listAll();
+        books.forEach(System.out::println);
+    }
+
+    @Test
+    void listAuthorWithBooks() {
+        List<Author> authors = bookRepository.listAuthorWithBooks();
+        authors.forEach(System.out::println);
+    }
+
+    @Test
+    void listAllBookTitles() {
+        List<String> titles = bookRepository.listAllBookTitles();
+        titles.forEach(System.out::println);
+    }
+
+
+
 }

@@ -3,6 +3,7 @@ package com.github.kawevk.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Table(name = "author", schema = "public")
 @Data
 @AllArgsConstructor
+@ToString(exclude = "books")
 public class Author {
 
     @Id
