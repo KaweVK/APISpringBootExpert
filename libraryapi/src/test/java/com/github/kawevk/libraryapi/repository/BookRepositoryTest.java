@@ -32,11 +32,11 @@ class BookRepositoryTest {
     @Test
     void save() {
         Book book = new Book();
-        book.setIsbn("99999-99999");
-        book.setTitle("A cinco passos de você");
+        book.setIsbn("99999-32999");
+        book.setTitle("A biografia de Kawe");
         book.setPublicationDate(LocalDate.of(2005, 4, 25));
         book.setPrice(BigDecimal.valueOf(45.9));
-        book.setGender(BookGender.ROMANCE);
+        book.setGender(BookGender.BIOGRAFIA);
 
         Author author = authorRepository.findById(UUID.fromString("d92eb885-0784-4c35-a069-841a9b9c98e5")).orElse(null);
         book.setAuthor(author);
@@ -120,6 +120,11 @@ class BookRepositoryTest {
     void findByGender() {
         List<Book> books = bookRepository.findByGender(BookGender.ROMANCE, "title");
         books.forEach(System.out::println);
+    }
+
+    @Test
+    void deleteByGender() {
+        bookRepository.deleteByGender(BookGender.BIOGRAFIA);
     }
 
 }
