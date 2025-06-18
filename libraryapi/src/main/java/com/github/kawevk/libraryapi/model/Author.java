@@ -45,7 +45,7 @@ public class Author {
 
     @Deprecated
     public Author() {
-        //paara o Hibernate
+        //para o Hibernate
     }
 
 }
