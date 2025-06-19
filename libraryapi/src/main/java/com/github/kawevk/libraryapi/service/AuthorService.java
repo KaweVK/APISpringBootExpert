@@ -22,4 +22,10 @@ public class AuthorService {
         return authorRepository.findById(id);
     }
 
+    public void deleteAuthor(UUID idAuthor) {
+        Optional<Author> authorOptional = authorRepository.findById(idAuthor);
+        if (authorOptional.isPresent()) {
+            authorRepository.delete(authorOptional.get());
+        }
+    }
 }
