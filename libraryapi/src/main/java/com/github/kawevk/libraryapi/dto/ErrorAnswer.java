@@ -10,11 +10,19 @@ public record ErrorAnswer(int status, String message, List<ErrorField> fields) {
         return new ErrorAnswer(HttpStatus.BAD_REQUEST.value(), message, List.of());
     }
 
+    public static ErrorAnswer badRequestAnswer(String message) {
+        return new ErrorAnswer(HttpStatus.BAD_REQUEST.value(), message, List.of());
+    }
+
     public static ErrorAnswer conflictAnswer(String message) {
         return new ErrorAnswer(HttpStatus.CONFLICT.value(), message, List.of());
     }
 
     public static ErrorAnswer internalServerErrorAnswer(String message) {
         return new ErrorAnswer(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, List.of());
+    }
+
+    public static ErrorAnswer unprocessableEntityAnswer(String message, List<ErrorField> fields) {
+        return new ErrorAnswer(HttpStatus.UNPROCESSABLE_ENTITY.value(), message, fields);
     }
 }
