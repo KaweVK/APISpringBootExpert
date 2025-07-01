@@ -1,14 +1,10 @@
 package com.github.kawevk.libraryapi.service;
 
-import com.github.kawevk.libraryapi.dto.AuthorDTO;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.repository.AuthorRepository;
+import com.github.kawevk.libraryapi.validator.AuthorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +14,11 @@ public class AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
+    @Autowired
+    private AuthorValidator authorValidator;
 
     public Author createAuthor(Author author) {
+        authorValidator.validate(author);
         return authorRepository.save(author);
     }
 
