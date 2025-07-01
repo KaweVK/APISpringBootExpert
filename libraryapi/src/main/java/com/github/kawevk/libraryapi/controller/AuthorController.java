@@ -6,8 +6,8 @@ import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,7 +25,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<Object> createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Object> createAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         try {
             var author = authorDTO.MapToAuthor();
             authorService.createAuthor(author);
@@ -39,6 +39,9 @@ public class AuthorController {
                     .body("Author created successfully with ID: " + author.getId());
         } catch (DuplicatedRegisterException e) {
             var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+        } catch (Exception e) {
+            var errorDTO = ErrorAnswer.internalServerErrorAnswer(e.getMessage());
             return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
     }
