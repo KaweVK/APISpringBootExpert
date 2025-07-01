@@ -1,0 +1,17 @@
+package com.github.kawevk.libraryapi.dto;
+
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
+
+public record ErrorAnswer(int status, String message, List<ErrorField> fields) {
+
+    public static ErrorAnswer defaultAnswer(String message) {
+        return new ErrorAnswer(HttpStatus.BAD_REQUEST.value(), message, List.of());
+    }
+
+    public static ErrorAnswer conflictAnswer(String message) {
+        return new ErrorAnswer(HttpStatus.CONFLICT.value(), message, List.of());
+    }
+
+}
