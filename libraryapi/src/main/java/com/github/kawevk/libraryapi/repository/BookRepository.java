@@ -16,6 +16,8 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     List<Book> findByAuthor(Author author);
 
+    boolean existsByAuthor(Author author);
+
     List<Book> findByTitleContainingIgnoreCase(String title);
 
     @Query(" select b from Book as b order by b.title, b.price")
