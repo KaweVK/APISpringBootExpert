@@ -28,4 +28,16 @@ public class AuthorService {
             authorRepository.delete(authorOptional.get());
         }
     }
+
+    public Author updateAuthor(UUID id, Author author) {
+        Optional<Author> existingAuthor = authorRepository.findById(author.getId());
+        if (existingAuthor.isPresent()) {
+            Author updatedAuthor = existingAuthor.get();
+            updatedAuthor.setName(author.getName());
+            updatedAuthor.setBirthDate(author.getBirthDate());
+            updatedAuthor.setNationality(author.getNationality());
+            return authorRepository.save(updatedAuthor);
+        }
+        return null; // or throw an exception if preferred
+    }
 }
