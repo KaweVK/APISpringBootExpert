@@ -47,15 +47,10 @@ public class AuthorService {
 
     }
 
-    public Author updateAuthor(UUID id, Author author) {
-        Optional<Author> existingAuthor = authorRepository.findById(author.getId());
-        if (existingAuthor.isPresent()) {
-            Author updatedAuthor = existingAuthor.get();
-            updatedAuthor.setName(author.getName());
-            updatedAuthor.setBirthDate(author.getBirthDate());
-            updatedAuthor.setNationality(author.getNationality());
-            return authorRepository.save(updatedAuthor);
+    public void updateAuthor(Author author) {
+        if (author.getId() == null) {
+            throw new IllegalArgumentException("Author id must not be null");
         }
-        return null; // or throw an exception if preferred
+        authorRepository.save(author);
     }
 }
