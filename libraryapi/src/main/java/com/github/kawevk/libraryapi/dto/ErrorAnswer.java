@@ -14,4 +14,7 @@ public record ErrorAnswer(int status, String message, List<ErrorField> fields) {
         return new ErrorAnswer(HttpStatus.CONFLICT.value(), message, List.of());
     }
 
+    public static ErrorAnswer internalServerErrorAnswer(String message) {
+        return new ErrorAnswer(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, List.of());
+    }
 }

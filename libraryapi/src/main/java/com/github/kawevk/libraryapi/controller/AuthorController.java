@@ -86,21 +86,32 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAuthor(@PathVariable("id") String id, @RequestBody AuthorDTO authorDTO) {
-        var idAuthor = UUID.fromString(id);
-        Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
-        if (authorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> updateAuthor(@PathVariable("id") String id, @RequestBody AuthorDTO authorDTO) {
+        try {
+            var idAuthor = UUID.fromString(id);
+            Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
+            if (authorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
 
+            }
+            var author = authorOptional.get();
+            authorService.updateAuthor(author);
+            author.setName(authorDTO.name());
+            author.setBirthDate(authorDTO.birthDate());
+            author.setNationality(authorDTO.nacionality());
+            authorService.updateAuthor(author);
+
+            return ResponseEntity.noContent().build();
+        } catch (DuplicatedRegisterException e) {
+            var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+        } catch (IllegalArgumentException e) {
+            var errorDTO = ErrorAnswer.defaultAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+        } catch (Exception e) {
+            var errorDTO = ErrorAnswer.internalServerErrorAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
-        var author = authorOptional.get();
-        authorService.updateAuthor(author);
-        author.setName(authorDTO.name());
-        author.setBirthDate(authorDTO.birthDate());
-        author.setNationality(authorDTO.nacionality());
-        authorService.updateAuthor(author);
-
-        return ResponseEntity.noContent().build();
     }
 
 }
