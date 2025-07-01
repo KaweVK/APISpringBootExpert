@@ -1,7 +1,9 @@
 package com.github.kawevk.libraryapi.service;
 
+import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.repository.AuthorRepository;
+import com.github.kawevk.libraryapi.repository.BookRepository;
 import com.github.kawevk.libraryapi.validator.AuthorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ public class AuthorService {
     private AuthorRepository authorRepository;
     @Autowired
     private AuthorValidator authorValidator;
+    @Autowired
+    private BookRepository bookRepository;
 
     public Author createAuthor(Author author) {
         authorValidator.validate(author);
@@ -27,6 +31,10 @@ public class AuthorService {
     }
 
     public void deleteAuthor(UUID idAuthor) {
+        if (hasBooks(authorRepository.findById(idAuthor).get())) {
+            throw new OperationNotAllowedException("Author with id " + idAuthor + " has books associated and cannot be deleted.");
+        }
+
         Optional<Author> authorOptional = authorRepository.findById(idAuthor);
         if (authorOptional.isPresent()) {
             authorRepository.delete(authorOptional.get());
@@ -51,5 +59,9 @@ public class AuthorService {
             throw new IllegalArgumentException("Author id must not be null");
         }
         authorRepository.save(author);
+    }
+
+    public boolean hasBooks(Author author) {
+        return bookRepository.existsByAuthor(author);
     }
 }
