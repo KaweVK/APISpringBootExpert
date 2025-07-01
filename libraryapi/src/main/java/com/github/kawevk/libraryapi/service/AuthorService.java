@@ -5,21 +5,19 @@ import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.repository.AuthorRepository;
 import com.github.kawevk.libraryapi.repository.BookRepository;
 import com.github.kawevk.libraryapi.validator.AuthorValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorService {
 
-    @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
-    private AuthorValidator authorValidator;
-    @Autowired
-    private BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final AuthorValidator authorValidator;
+    private final BookRepository bookRepository;
 
     public Author createAuthor(Author author) {
         authorValidator.validate(author);

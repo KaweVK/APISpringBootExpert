@@ -6,6 +6,7 @@ import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.service.AuthorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/authors")
+@RequiredArgsConstructor
 public class AuthorController {
 
-    @Autowired
-    private AuthorService authorService;
+    private final AuthorService authorService;
 
     @PostMapping
     public ResponseEntity<Object> createAuthor(@RequestBody AuthorDTO authorDTO) {
@@ -97,6 +98,7 @@ public class AuthorController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateAuthor(@PathVariable("id") String id, @RequestBody AuthorDTO authorDTO) {
         try {
+
             var idAuthor = UUID.fromString(id);
             Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
             if (authorOptional.isEmpty()) {
@@ -111,6 +113,7 @@ public class AuthorController {
             authorService.updateAuthor(author);
 
             return ResponseEntity.noContent().build();
+
         } catch (DuplicatedRegisterException e) {
             var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
             return ResponseEntity.status(errorDTO.status()).body(errorDTO);
