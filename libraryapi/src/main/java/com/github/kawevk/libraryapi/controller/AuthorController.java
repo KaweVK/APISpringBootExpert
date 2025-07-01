@@ -3,6 +3,7 @@ package com.github.kawevk.libraryapi.controller;
 import com.github.kawevk.libraryapi.dto.AuthorDTO;
 import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
+import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +61,21 @@ public class AuthorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAuthor(@PathVariable("id") String id) {
-        var idAuthor = UUID.fromString(id);
-        Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
-        if (authorOptional.isPresent()) {
-            authorService.deleteAuthor(idAuthor);
-            return ResponseEntity.ok("Author deleted successfully.");
+        try {
+            var idAuthor = UUID.fromString(id);
+            Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
+            if (authorOptional.isPresent()) {
+                authorService.deleteAuthor(idAuthor);
+                return ResponseEntity.ok("Author deleted successfully.");
+            }
+            return ResponseEntity.notFound().build();
+        } catch (OperationNotAllowedException | IllegalArgumentException e) {
+            var errorDTO = ErrorAnswer.defaultAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+        } catch (Exception e) {
+            var errorDTO = ErrorAnswer.internalServerErrorAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping
