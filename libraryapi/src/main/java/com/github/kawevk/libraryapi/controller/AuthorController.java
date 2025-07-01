@@ -1,6 +1,8 @@
 package com.github.kawevk.libraryapi.controller;
 
 import com.github.kawevk.libraryapi.dto.AuthorDTO;
+import com.github.kawevk.libraryapi.dto.ErrorAnswer;
+import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +24,21 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<Object> createAuthor(@RequestBody AuthorDTO authorDTO) {
-        var author = authorDTO.MapToAuthor();
-        authorService.createAuthor(author);
+        try {
+            var author = authorDTO.MapToAuthor();
+            authorService.createAuthor(author);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(author.getId())
-                .toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(author.getId())
+                    .toUri();
 
-        return ResponseEntity.created(location)
-                .body("Author created successfully with ID: " + author.getId());
+            return ResponseEntity.created(location)
+                    .body("Author created successfully with ID: " + author.getId());
+        } catch (DuplicatedRegisterException e) {
+            var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+        }
     }
 
     @GetMapping("/{id}")
