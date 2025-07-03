@@ -6,6 +6,8 @@ import com.github.kawevk.libraryapi.repository.AuthorRepository;
 import com.github.kawevk.libraryapi.repository.BookRepository;
 import com.github.kawevk.libraryapi.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +53,24 @@ public class AuthorService {
         return authorRepository.findAll();
 
     }
+
+    public List<Author> searchAuthorsByExample(String name, String nacionality) {
+        var author = new Author();
+        author.setName(name);
+        author.setNationality(nacionality);
+
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Author> authorExample = Example.of(author, matcher);
+
+        return authorRepository.findAll(authorExample);
+
+    }
+
 
     public void updateAuthor(Author author) {
         if (author.getId() == null) {

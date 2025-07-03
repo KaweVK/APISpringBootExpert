@@ -87,7 +87,7 @@ public class AuthorController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "nacionality", required = false) String nacionality
     ) {
-        List<Author> authors = authorService.searchAuthors(name, nacionality);
+        List<Author> authors = authorService.searchAuthorsByExample(name, nacionality);
         List<AuthorDTO> authorDTOs = authors.stream()
                 .map(author -> new AuthorDTO(
                         author.getId(),
