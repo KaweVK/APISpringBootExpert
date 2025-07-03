@@ -99,7 +99,7 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateAuthor(@PathVariable("id") String id, @RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Object> updateAuthor(@PathVariable("id") String id, @RequestBody @Valid AuthorDTO authorDTO) {
         try {
 
             var idAuthor = UUID.fromString(id);
