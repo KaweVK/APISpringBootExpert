@@ -5,9 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "author")
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
 
     @Id
@@ -34,8 +39,15 @@ public class Book {
     private BookGender gender;
     @Column(name = "price", nullable = false, precision = 18, scale = 2)
     private BigDecimal price;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_author", nullable = false)
     private Author author;
+    @CreatedDate
+    @Column(name = "register_date")
+    private LocalDateTime registerDate;
+    @LastModifiedDate
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
+    @Column(name = "user_id")
+    private UUID userId;
 }
