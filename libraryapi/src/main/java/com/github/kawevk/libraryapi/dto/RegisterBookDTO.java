@@ -1,0 +1,17 @@
+package com.github.kawevk.libraryapi.dto;
+
+import com.github.kawevk.libraryapi.model.BookGender;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record RegisterBookDTO(
+        String title,
+        String isbn,
+        LocalDate publishedDate,
+        BookGender gender,
+        BigDecimal price,
+        UUID authorId
+) {
+}
