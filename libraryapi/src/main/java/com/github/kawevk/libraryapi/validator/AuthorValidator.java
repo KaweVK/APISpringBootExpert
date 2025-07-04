@@ -3,16 +3,16 @@ package com.github.kawevk.libraryapi.validator;
 import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.repository.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorValidator {
 
-    @Autowired
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
     public void validate(Author author){
         if(existAuthor(author)){
