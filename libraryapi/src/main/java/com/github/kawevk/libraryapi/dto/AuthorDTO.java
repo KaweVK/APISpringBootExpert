@@ -1,6 +1,5 @@
 package com.github.kawevk.libraryapi.dto;
 
-import com.github.kawevk.libraryapi.model.Author;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -19,14 +18,5 @@ public record AuthorDTO
          LocalDate birthDate,
          @NotBlank(message = "Nationality cannot be blank")
          @Size(min = 2, max = 50, message= "Nationality must be between 2 and 50 characters")
-         String nacionality) {
-
-    public Author MapToAuthor() {
-        Author author = new Author();
-        author.setName(name);
-        author.setBirthDate(birthDate);
-        author.setNationality(nacionality);
-        return author;
-    }
-
+         String nationality) {
 }
