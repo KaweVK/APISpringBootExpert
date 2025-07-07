@@ -4,6 +4,7 @@ import com.github.kawevk.libraryapi.dto.AuthorDTO;
 import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
+import com.github.kawevk.libraryapi.mappers.AuthorMapper;
 import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.service.AuthorService;
 import jakarta.validation.Valid;
@@ -23,11 +24,12 @@ import java.util.UUID;
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorMapper mapper;
 
     @PostMapping
     public ResponseEntity<Object> createAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         try {
-            var author = authorDTO.MapToAuthor();
+            var author = mapper.toEntity(authorDTO);
             authorService.createAuthor(author);
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -49,25 +51,18 @@ public class AuthorController {
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthor(@PathVariable("id") String id) {
         var idAuthor = UUID.fromString(id);
-        Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
-        if (authorOptional.isPresent()) {
-            Author author = authorOptional.get();
-            AuthorDTO dto = new AuthorDTO(
-                author.getId(),
-                author.getName(),
-                author.getBirthDate(),
-                author.getNationality()
-            );
+
+        return authorService.findById(idAuthor).map(author -> {
+            AuthorDTO dto = mapper.toDTO(author);
             return ResponseEntity.ok(dto);
-        }
-        return ResponseEntity.notFound().build();
+        }).orElseGet( () -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAuthor(@PathVariable("id") String id) {
         try {
             var idAuthor = UUID.fromString(id);
-            Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
+            Optional<Author> authorOptional = authorService.findById(idAuthor);
             if (authorOptional.isPresent()) {
                 authorService.deleteAuthor(idAuthor);
                 return ResponseEntity.ok("Author deleted successfully.");
@@ -85,15 +80,11 @@ public class AuthorController {
     @GetMapping
     public ResponseEntity<List<AuthorDTO>> searchAuthors(
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "nacionality", required = false) String nacionality
+            @RequestParam(value = "nationality", required = false) String nationality
     ) {
-        List<Author> authors = authorService.searchAuthorsByExample(name, nacionality);
+        List<Author> authors = authorService.searchAuthorsByExample(name, nationality);
         List<AuthorDTO> authorDTOs = authors.stream()
-                .map(author -> new AuthorDTO(
-                        author.getId(),
-                        author.getName(),
-                        author.getBirthDate(),
-                        author.getNationality()))
+                .map(mapper::toDTO)
                 .toList();
         return ResponseEntity.ok(authorDTOs);
     }
@@ -103,7 +94,7 @@ public class AuthorController {
         try {
 
             var idAuthor = UUID.fromString(id);
-            Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
+            Optional<Author> authorOptional = authorService.findById(idAuthor);
             if (authorOptional.isEmpty()) {
                 return ResponseEntity.notFound().build();
 
@@ -112,7 +103,7 @@ public class AuthorController {
             authorService.updateAuthor(author);
             author.setName(authorDTO.name());
             author.setBirthDate(authorDTO.birthDate());
-            author.setNationality(authorDTO.nacionality());
+            author.setNationality(authorDTO.nationality());
             authorService.updateAuthor(author);
 
             return ResponseEntity.noContent().build();
