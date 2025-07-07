@@ -26,7 +26,7 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public Optional<Author> getAuthor(UUID id) {
+    public Optional<Author> findById(UUID id) {
         return authorRepository.findById(id);
     }
 
@@ -70,7 +70,6 @@ public class AuthorService {
         return authorRepository.findAll(authorExample);
 
     }
-
 
     public void updateAuthor(Author author) {
         if (author.getId() == null) {
