@@ -2,10 +2,12 @@ package com.github.kawevk.libraryapi.controller;
 
 import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.dto.RegisterBookDTO;
+import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
+import com.github.kawevk.libraryapi.mappers.BookMapper;
+import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,17 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
-public class BookController {
+public class BookController implements GenericController {
 
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @PostMapping
-    public ResponseEntity<Object> createBook(@RequestBody @Valid RegisterBookDTO book) {
+    public ResponseEntity<Object> createBook(@RequestBody @Valid RegisterBookDTO bookDTO) {
        try {
-            return ResponseEntity.ok(book);
-        } catch (Exception e) {
-            var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
-            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
+           Book book = bookMapper.toEntity(bookDTO);
+           bookService.createBook(book);
+           var uri = generateLocation(book.getId());
+           return ResponseEntity.created(uri).body("Author created successfully with ID: " + book.getId());
+        } catch (DuplicatedRegisterException e) {
+           var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
+           return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
     }
 }
