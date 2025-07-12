@@ -19,7 +19,7 @@ public record RegisterBookDTO(
         String title,
         @NotNull(message = "Campo obrigatório")
         @Past(message = "Data de publicação deve ser no passado")
-        LocalDate publishedDate,
+        LocalDate publicationDate,
         BookGender gender,
         BigDecimal price,
         @NotNull(message = "Campo obrigatório")
