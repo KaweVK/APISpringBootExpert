@@ -1,13 +1,14 @@
 package com.github.kawevk.libraryapi.mappers;
 
 import com.github.kawevk.libraryapi.dto.RegisterBookDTO;
+import com.github.kawevk.libraryapi.dto.SearchBookDTO;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.repository.AuthorRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {AuthorMapper .class})
 public abstract class BookMapper {
 
     @Autowired
@@ -17,4 +18,5 @@ public abstract class BookMapper {
     @Mapping(target = "publicationDate", source = "publicationDate")
     public abstract Book toEntity(RegisterBookDTO bookDTO);
 
+    public abstract SearchBookDTO toDTO(Book book);
 }
