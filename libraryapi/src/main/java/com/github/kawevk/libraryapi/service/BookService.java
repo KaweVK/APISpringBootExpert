@@ -3,6 +3,7 @@ package com.github.kawevk.libraryapi.service;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.model.BookGender;
 import com.github.kawevk.libraryapi.repository.BookRepository;
+import com.github.kawevk.libraryapi.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,10 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookValidator bookValidator;
 
     public Book createBook(Book book) {
+        bookValidator.validar(book);
         return bookRepository.save(book);
     }
 
@@ -59,6 +62,8 @@ public class BookService {
         if (book.getId() == null) {
             throw new IllegalArgumentException("Book ID must not be null for update");
         }
+
+        bookValidator.validar(book);
         bookRepository.save(book);
     }
 }
