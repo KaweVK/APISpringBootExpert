@@ -4,6 +4,7 @@ import com.github.kawevk.libraryapi.model.Author;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.model.BookGender;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,13 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
-
-    List<Book> findByAuthor(Author author);
+public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
 
     boolean existsByAuthor(Author author);
-
-    List<Book> findByTitleContainingIgnoreCase(String title);
 
     @Query(" select b from Book as b order by b.title, b.price")
     List<Book> listAll();
