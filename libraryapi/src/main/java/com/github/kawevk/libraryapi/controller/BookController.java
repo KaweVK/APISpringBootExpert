@@ -1,8 +1,6 @@
 package com.github.kawevk.libraryapi.controller;
 
-import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.dto.RegisterBookDTO;
-import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
 import com.github.kawevk.libraryapi.mappers.BookMapper;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.service.BookService;
@@ -24,14 +22,9 @@ public class BookController implements GenericController {
 
     @PostMapping
     public ResponseEntity<Object> createBook(@RequestBody @Valid RegisterBookDTO bookDTO) {
-       try {
-           Book book = bookMapper.toEntity(bookDTO);
-           bookService.createBook(book);
-           var uri = generateLocation(book.getId());
-           return ResponseEntity.created(uri).body("Author created successfully with ID: " + book.getId());
-        } catch (DuplicatedRegisterException e) {
-           var errorDTO = ErrorAnswer.conflictAnswer(e.getMessage());
-           return ResponseEntity.status(errorDTO.status()).body(errorDTO);
-        }
+        Book book = bookMapper.toEntity(bookDTO);
+        bookService.createBook(book);
+        var uri = generateLocation(book.getId());
+        return ResponseEntity.created(uri).body("Author created successfully with ID: " + book.getId());
     }
 }
