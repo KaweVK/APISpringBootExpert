@@ -1,16 +1,16 @@
 package com.github.kawevk.libraryapi.controller;
 
 import com.github.kawevk.libraryapi.dto.RegisterBookDTO;
+import com.github.kawevk.libraryapi.dto.SearchBookDTO;
 import com.github.kawevk.libraryapi.mappers.BookMapper;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/books")
@@ -26,5 +26,14 @@ public class BookController implements GenericController {
         bookService.createBook(book);
         var uri = generateLocation(book.getId());
         return ResponseEntity.created(uri).body("Author created successfully with ID: " + book.getId());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SearchBookDTO> getBook(@PathVariable("id") String id) {
+        UUID uuid = UUID.fromString(id);
+        return bookService.findById(uuid).map(book -> {
+            var dto = bookMapper.toDTO(book);
+            return ResponseEntity.ok(dto);
+        }).orElseGet( () -> ResponseEntity.notFound().build() );
     }
 }
