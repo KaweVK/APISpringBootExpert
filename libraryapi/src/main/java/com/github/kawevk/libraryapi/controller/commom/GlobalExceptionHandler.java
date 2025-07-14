@@ -3,6 +3,7 @@ package com.github.kawevk.libraryapi.controller.commom;
 import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.dto.ErrorField;
 import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
+import com.github.kawevk.libraryapi.exception.InvalidFieldException;
 import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -36,6 +37,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorAnswer handleOperationNotAllowedException(OperationNotAllowedException e) {
         return ErrorAnswer.defaultAnswer(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErrorAnswer handleInvalidFieldException(InvalidFieldException e) {
+        return new ErrorAnswer(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação.", List.of(new ErrorField(e.getCampo(), e.getMessage())));
     }
 
     @ExceptionHandler(RuntimeException.class)
