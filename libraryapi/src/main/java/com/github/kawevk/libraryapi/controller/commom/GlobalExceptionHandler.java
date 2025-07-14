@@ -2,6 +2,8 @@ package com.github.kawevk.libraryapi.controller.commom;
 
 import com.github.kawevk.libraryapi.dto.ErrorAnswer;
 import com.github.kawevk.libraryapi.dto.ErrorField;
+import com.github.kawevk.libraryapi.exception.DuplicatedRegisterException;
+import com.github.kawevk.libraryapi.exception.OperationNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,5 +24,23 @@ public class GlobalExceptionHandler {
         List<ErrorField> errorsList = fieldErrorList.stream().map(fe -> new ErrorField(fe.getField(), fe.getDefaultMessage())).collect(Collectors.toList());
 
         return ErrorAnswer.unprocessableEntityAnswer("Validation failed", errorsList);
+    }
+
+    @ExceptionHandler(DuplicatedRegisterException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorAnswer handleDuplicatedRegisterException(DuplicatedRegisterException e) {
+        return ErrorAnswer.conflictAnswer(e.getMessage());
+    }
+
+    @ExceptionHandler(OperationNotAllowedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorAnswer handleOperationNotAllowedException(OperationNotAllowedException e) {
+        return ErrorAnswer.defaultAnswer(e.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorAnswer handleException(RuntimeException e) {
+        return ErrorAnswer.internalServerErrorAnswer("An unexpected error occurred, please try again later.");
     }
 }
