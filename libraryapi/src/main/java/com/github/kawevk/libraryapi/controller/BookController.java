@@ -8,10 +8,10 @@ import com.github.kawevk.libraryapi.model.BookGender;
 import com.github.kawevk.libraryapi.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,7 +50,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<SearchBookDTO>> search(
+    public ResponseEntity<Page<SearchBookDTO>> search(
             @RequestParam(value = "isbn", required = false)
             String isbn,
             @RequestParam(value = "title", required = false)
@@ -60,11 +60,17 @@ public class BookController implements GenericController {
             @RequestParam(value = "book-gender", required = false)
             BookGender bookGender,
             @RequestParam(value = "publication-year", required = false)
-            Integer publicationYear
+            Integer publicationYear,
+            @RequestParam(value = "page", defaultValue = "0")
+            Integer page,
+            @RequestParam(value = "page-size", defaultValue = "10")
+            Integer size
     ) {
-       var searchDTO = bookService.search(isbn, title, authorName, bookGender, publicationYear);
-       var list = searchDTO.stream().map(bookMapper::toDTO).collect(Collectors.toList());
-       return ResponseEntity.ok(list);
+       Page<Book> pageResult = bookService.search(isbn, title, authorName, bookGender, publicationYear, page, size);
+
+       Page<SearchBookDTO> result = pageResult.map(bookMapper::toDTO);
+
+       return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{id}")
