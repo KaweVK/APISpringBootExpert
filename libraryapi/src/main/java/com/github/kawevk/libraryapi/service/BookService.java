@@ -5,12 +5,14 @@ import com.github.kawevk.libraryapi.model.BookGender;
 import com.github.kawevk.libraryapi.repository.BookRepository;
 import com.github.kawevk.libraryapi.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import static com.github.kawevk.libraryapi.repository.specs.BookSpecs.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,7 +36,7 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public List<Book> search(String isbn, String title, String authorName, BookGender bookGender, Integer publicationYear) {
+    public Page<Book> search(String isbn, String title, String authorName, BookGender bookGender, Integer publicationYear, Integer page, Integer size) {
 
         Specification<Book> specs = Specification
                 .where( ((root, query, cb) -> cb.conjunction()) );
@@ -55,7 +57,9 @@ public class BookService {
             specs = specs.and(publicationYearEqual(publicationYear));
         }
 
-        return bookRepository.findAll(specs);
+        Pageable pageable = PageRequest.of(page, size);
+
+        return bookRepository.findAll(specs, pageable);
     }
 
     public void updateBook(Book book) {
