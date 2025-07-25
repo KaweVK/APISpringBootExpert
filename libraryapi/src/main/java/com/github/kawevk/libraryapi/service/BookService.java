@@ -1,5 +1,7 @@
 package com.github.kawevk.libraryapi.service;
 
+import com.github.kawevk.libraryapi.dto.SearchBookDTO;
+import com.github.kawevk.libraryapi.mappers.BookMapper;
 import com.github.kawevk.libraryapi.model.Book;
 import com.github.kawevk.libraryapi.model.BookGender;
 import com.github.kawevk.libraryapi.repository.BookRepository;
@@ -22,6 +24,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookValidator bookValidator;
+    private final BookMapper bookMapper;
 
     public Book createBook(Book book) {
         bookValidator.validar(book);
@@ -36,7 +39,7 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public Page<Book> search(String isbn, String title, String authorName, BookGender bookGender, Integer publicationYear, Integer page, Integer size) {
+    public Page<SearchBookDTO> search(String isbn, String title, String authorName, BookGender bookGender, Integer publicationYear, Integer page, Integer size) {
 
         Specification<Book> specs = Specification
                 .where( ((root, query, cb) -> cb.conjunction()) );
@@ -59,7 +62,11 @@ public class BookService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return bookRepository.findAll(specs, pageable);
+        Page<Book> pageResult = bookRepository.findAll(specs, pageable);
+
+        Page<SearchBookDTO> result = pageResult.map(bookMapper::toDTO);
+
+        return result;
     }
 
     public void updateBook(Book book) {

@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -66,11 +65,9 @@ public class BookController implements GenericController {
             @RequestParam(value = "page-size", defaultValue = "10")
             Integer size
     ) {
-       Page<Book> pageResult = bookService.search(isbn, title, authorName, bookGender, publicationYear, page, size);
+       Page<SearchBookDTO> pageResult = bookService.search(isbn, title, authorName, bookGender, publicationYear, page, size);
 
-       Page<SearchBookDTO> result = pageResult.map(bookMapper::toDTO);
-
-       return ResponseEntity.ok(result);
+       return ResponseEntity.ok(pageResult);
     }
 
     @PutMapping("/{id}")
